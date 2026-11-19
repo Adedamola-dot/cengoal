@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { useAuthStore } from '../store/authStore';
 
-// 🔥 FORCING THE PRODUCTION URL FOR TESTING
-const baseURL = 'https://cengoal-api.onrender.com/api/v1';
+// Use the environment variable from Vercel, fallback to local for development
+const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
 
 export const api = axios.create({
   baseURL,
-  withCredentials: true, // Allows receiving the refreshToken cookie
+  withCredentials: true, 
   headers: {
     'Content-Type': 'application/json',
   },
