@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* ─── TYPOGRAPHY ─────────────────────────────────────────── */
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+
+  /* ─── 30% PRIMARY: NACOMES BLUE ──────────────────────────── */
+  /* We take the exact cyan-blue from your logo and build a scale */
+  --color-brand-50: #f0f9ff;
+  --color-brand-100: #e0f2fe;
+  --color-brand-200: #bae6fd;
+  --color-brand-300: #7dd3fc;
+  --color-brand-400: #38bdf8;
+  --color-brand-500: #0091d5; /* The NACOMES Logo Blue */
+  --color-brand-600: #0284c7;
+  --color-brand-700: #0369a1;
+  --color-brand-800: #075985;
+  --color-brand-900: #0c4a6e;
+
+  /* ─── 60% BASE: SLATE NEUTRALS ───────────────────────────── */
+  /* Cool grays that complement the blue perfectly */
+  --color-surface: #ffffff;
+  --color-background: #f8fafc;
+  --color-border: #e2e8f0;
+  --color-text-main: #0f172a;
+  --color-text-muted: #64748b;
+
+  /* ─── 10% ACCENT: WARM AMBER ─────────────────────────────── */
+  /* Used sparingly for notifications, CTAs, and highlights */
+  --color-accent-500: #f59e0b;
+  --color-accent-600: #d97706;
+}
+
+/* Base resets */
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-main);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}

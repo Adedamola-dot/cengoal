@@ -1,0 +1,6 @@
+# Every directory matching these globs is treated as a workspace package.
+# pnpm symlinks internal deps between them (e.g. @cpe-os/shared becomes
+# instantly available in both apps without publishing to npm).
+packages:
+  - 'apps/*'
+  - 'packages/*'
