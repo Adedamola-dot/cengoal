@@ -1,6 +1,7 @@
+import mongoose from 'mongoose';
 import { materialRepository } from '../repositories/material.repository.js';
 import { courseRepository } from '../repositories/course.repository.js';
-import { notificationService } from './notification.service.js'; // 🔥 Imported
+import { notificationService } from './notification.service.js';
 import { AppError } from '../utils/AppError.js';
 import type { IMaterial } from '../models/Material.js';
 
@@ -24,7 +25,7 @@ export class MaterialService {
       title: data.title,
       description: data.description,
       fileUrl: data.fileUrl,
-      uploadedBy: data.uploadedBy,
+      uploadedBy: new mongoose.Types.ObjectId(data.uploadedBy),
       deliveryLog: {
         inAppSeenBy: [],
         emailSentCount: 0,
@@ -34,12 +35,11 @@ export class MaterialService {
 
     const material = await materialRepository.create(materialData);
 
-    // 🔥 Trigger Global Notification
     await notificationService.broadcast(
       'New Material Uploaded',
       `A new material "${data.title}" was uploaded for ${data.courseCode}.`,
       'material',
-      '/courses' // Link to the Course Guide page
+      '/courses'
     );
 
     return material;

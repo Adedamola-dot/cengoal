@@ -28,7 +28,9 @@ export const uploadPastQuestion = asyncHandler(async (req: Request, res: Respons
 });
 
 export const getPastQuestionsByCourse = asyncHandler(async (req: Request, res: Response) => {
-  const { courseCode } = req.params;
+  const courseCode = req.params.courseCode as string;
+  if (!courseCode) throw new AppError('Course code is required', 400);
+
   const questions = await pastQuestionService.getByCourse(courseCode);
 
   res.status(200).json({
@@ -38,9 +40,10 @@ export const getPastQuestionsByCourse = asyncHandler(async (req: Request, res: R
   });
 });
 
-// 🔥 NEW: Vote Controller
 export const votePastQuestion = asyncHandler(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
+  if (!id) throw new AppError('Question ID is required', 400);
+
   const userId = req.user!.userId;
 
   const updatedQuestion = await pastQuestionService.voteHelpful(id, userId);

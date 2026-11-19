@@ -27,7 +27,9 @@ export const uploadMaterial = asyncHandler(async (req: Request, res: Response) =
 });
 
 export const getMaterialsByCourse = asyncHandler(async (req: Request, res: Response) => {
-  const { courseCode } = req.params;
+  const courseCode = req.params.courseCode as string;
+  if (!courseCode) throw new AppError('Course code is required', 400);
+
   const materials = await materialService.getByCourse(courseCode);
 
   res.status(200).json({
@@ -38,7 +40,9 @@ export const getMaterialsByCourse = asyncHandler(async (req: Request, res: Respo
 });
 
 export const markMaterialAsSeen = asyncHandler(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
+  if (!id) throw new AppError('Material ID is required', 400);
+  
   const userId = req.user!.userId;
 
   await materialService.markAsSeen(id, userId);
