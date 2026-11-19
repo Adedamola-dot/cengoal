@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { BookOpen, Download, FileText } from 'lucide-react';
 
 export default function CourseGuide() {
-  const queryClient = useQueryClient();
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
 
   // 1. Fetch all courses
@@ -31,10 +30,6 @@ export default function CourseGuide() {
   const markSeenMutation = useMutation({
     mutationFn: async (materialId: string) => {
       return await api.patch(`/materials/${materialId}/seen`);
-    },
-    onSuccess: () => {
-      // We don't necessarily need to invalidate here for the student, 
-      // but it's good practice if we show "Seen" status on the UI later.
     }
   });
 
