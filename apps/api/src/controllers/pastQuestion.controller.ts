@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { pastQuestionService } from '../services/pastQuestion.service.js';
 import { AppError } from '../utils/AppError.js';
+import { supabase } from '../config/supabase.js';
 
 export const uploadPastQuestion = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.userId;
@@ -10,7 +11,27 @@ export const uploadPastQuestion = asyncHandler(async (req: Request, res: Respons
     throw new AppError('Please upload a PDF file', 400);
   }
 
-  const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+  const filename = `${Date.now()}-${Math.round(Math.random() * 1e9)}.pdf`;
+
+  // Upload to Supabase Storage
+  const { error } = await supabase.storage
+    .from('cengoal')
+    .upload(filename, req.file.buffer, {
+      contentType: req.file.mimetype,
+      upsert: false,
+    });
+
+  if (error) {
+    console.error('Supabase Upload Error:', error);
+    throw new AppError('Failed to upload file to storage', 500);
+  }
+
+  // Get the public URL
+  const { data: publicUrlData } = supabase.storage
+    .from('cengoal')
+    .getPublicUrl(filename);
+
+  const fileUrl = publicUrlData.publicUrl;
 
   const questionData = {
     ...req.body,
@@ -45,7 +66,6 @@ export const votePastQuestion = asyncHandler(async (req: Request, res: Response)
   if (!id) throw new AppError('Question ID is required', 400);
 
   const userId = req.user!.userId;
-
   const updatedQuestion = await pastQuestionService.voteHelpful(id, userId);
 
   res.status(200).json({
